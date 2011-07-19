@@ -1,0 +1,15 @@
+title: Virtual Hosting
+desc: This module implements virtual hosting facilities for Phorum. It extends the vroot functionality of Phorum, so it is possible to bind a certain website hostname to a specific vroot. This way, multiple websites can have their own Phorum vroot on their own site, looking like it were a separate Phorum installation. There are also some extra's to make vroots / virtual hosts more versatile.
+version: 1.1.5
+require_version: 5.2.0
+author: Maurice Makaay <maurice@phorum.org>
+category: admin
+
+hook: common_pre|phorum_mod_virtual_hosting_common_pre
+hook: after_register|phorum_mod_virtual_hosting_after_register
+
+hook: admin_users_form|phorum_mod_virtual_hosting_admin_users_form
+hook: admin_users_form_save|phorum_mod_virtual_hosting_admin_users_form_save
+hook: admin_editfolder_form|phorum_mod_virtual_hosting_admin_editfolder_form
+hook: admin_editfolder_form_save|phorum_mod_virtual_hosting_admin_editfolder_form_save
+
