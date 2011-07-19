@@ -1,5 +1,5 @@
 Module  : Virtual Hosting
-Version : 1.1.5
+Version : 1.0.1
 Author  : Maurice Makaay <maurice@phorum.org>
 
 This module implements virtual hosting facilities for Phorum.
@@ -9,7 +9,7 @@ websites can have their own Phorum vroot on their own site, looking like
 it were a separate Phorum installation. There are also some extra's to
 make vroots / virtual hosts more versatile.
 
-For running this module, Phorum 5.2 or higher is required.
+For running this module, Phorum 5.1.21 or higher is required.
 
 The initial development of this module was genrously sponsored by
 Phorum users MarkFresh and rheo. Thanks a lot guys!

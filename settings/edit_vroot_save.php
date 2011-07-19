@@ -6,7 +6,7 @@ if (!defined("PHORUM_ADMIN")) return;
 $vroot_list = phorum_get_forum_info(3, -1);
 
 $vroot = NULL;
-if (count($_REQUEST) &&
+if (count($_REQUEST) && 
     isset($_REQUEST["vh_vroot"]) && !empty($_REQUEST["vh_vroot"])) {
     $vroot = (int) $_REQUEST["vh_vroot"];
 }
@@ -49,7 +49,7 @@ foreach ($_POST["vh_hostnames"] as $id => $hostname)
     }
 
     // Check if the hostname is not already in use for another vroot.
-    if (isset($all_virtual_hosts[$hostname]) &&
+    if (isset($all_virtual_hosts[$hostname]) && 
         $all_virtual_hosts[$hostname] != $vroot) {
         phorum_admin_error("$hostname is already in use by " .
                            "<a href=\"{$_SERVER["PHP_SELF"]}?module=editfolder&forum_id=" .
@@ -113,9 +113,9 @@ $overrides = array(
 );
 
 foreach ($overrides as $k => $v) {
-    $formk = "vh_$k";
+    $formk = "vh_$k"; 
     if (isset($_POST[$formk])) {
-        $v = trim($_POST[$formk]);
+        $v = trim($_POST[$formk]);     
         if ($v == '') $v = NULL;
         $overrides[$k] = $v;
     }

@@ -19,10 +19,10 @@ function virtual_hosting_db_getvrootbyname($hostname)
         WHERE hostname='".addslashes($hostname)."'
     ";
 
-    $conn = phorum_db_mysql_connect();
-    $res = mysql_query($sql, $conn);
-    if ($err = mysql_error()) phorum_db_mysql_error("$err: $sql");
-    $rec = mysql_fetch_array($res);
+    $conn = phorum_db_mysqli_connect();
+    $res = mysqli_query($conn, $sql);
+    if ($err = mysqli_error()) phorum_db_mysqli_error("$err: $sql");
+    $rec = mysqli_fetch_array($res);
     return $rec ? $rec[0] : NULL;
 }
 
@@ -49,12 +49,12 @@ function virtual_hosting_db_gethostnames($vroot = NULL)
         $sql .= " WHERE vroot = $vroot";
     }
 
-    $conn = phorum_db_mysql_connect();
-    $res = mysql_query($sql, $conn);
-    if ($err = mysql_error()) phorum_db_mysql_error("$err: $sql");
+    $conn = phorum_db_mysqli_connect();
+    $res = mysqli_query($conn, $sql);
+    if ($err = mysqli_error()) phorum_db_mysqli_error("$err: $sql");
     $return = array();
-    if (mysql_num_rows($res) > 0) {
-        while ($rec = mysql_fetch_array($res)) {
+    if (mysqli_num_rows($res) > 0) {
+        while ($rec = mysqli_fetch_array($res)) {
             $return[$rec[0]] = $rec[1];
         }
     }
@@ -81,9 +81,9 @@ function virtual_hosting_db_linkhostname($vroot, $hostname)
         VALUES ($vroot, '".addslashes($hostname)."')
     ";
     
-    $conn = phorum_db_mysql_connect();
-    $res = mysql_query($sql, $conn);
-    if ($err = mysql_error()) phorum_db_mysql_error("$err: $sql");
+    $conn = phorum_db_mysqli_connect();
+    $res = mysqli_query($conn, $sql);
+    if ($err = mysqli_error()) phorum_db_mysqli_error("$err: $sql");
 
     return $err 
         ? "Linking ".htmlspecialchars($hostname) ." to vroot $vroot failed"
@@ -111,9 +111,9 @@ function virtual_hosting_db_unlinkhostname($vroot, $hostname)
               vroot = $vroot
     ";
     
-    $conn = phorum_db_mysql_connect();
-    $res = mysql_query($sql, $conn);
-    if ($err = mysql_error()) phorum_db_mysql_error("$err: $sql");
+    $conn = phorum_db_mysqli_connect();
+    $res = mysqli_query($conn, $sql);
+    if ($err = mysqli_error()) phorum_db_mysqli_error("$err: $sql");
 
     return $err 
         ? "Unlinking ".htmlspecialchars($hostname) ." from vroot $vroot failed"
@@ -138,12 +138,12 @@ function virtual_hosting_db_fixintegrity()
                 ON v.vroot = forum_id
          WHERE  forum_id IS NULL";
 
-    $conn = phorum_db_mysql_connect();
-    $res = mysql_query($sql, $conn);
-    if ($err = mysql_error()) phorum_db_mysql_error("$err: $sql");
-    if (mysql_num_rows($res) > 0) {
-        while ($rec = mysql_fetch_array($res)) {
-          virtual_hosting_db_unlinkhostname($rec[0], $rec[1]); 
+    $conn = phorum_db_mysqli_connect();
+    $res = mysqli_query($conn, $sql);
+    if ($err = mysqli_error()) phorum_db_mysqli_error("$err: $sql");
+    if (mysqli_num_rows($res) > 0) {
+        while ($rec = mysqli_fetch_array($res)) {
+          virtual_hosting_db_unlinkhostname($rec[0], $rec[1]);
         }
     }
 }
@@ -172,10 +172,10 @@ function virtual_hosting_db_setvrootconfig($vroot, $settings)
         WHERE forum_id = $vroot
     ";
 
-    $conn = phorum_db_mysql_connect();
-    $res = mysql_query($sql, $conn);
-    if ($err = mysql_error()) {
-        phorum_db_mysql_error("$err: $sql");
+    $conn = phorum_db_mysqli_connect();
+    $res = mysqli_query($conn, $sql);
+    if ($err = mysqli_error()) {
+        phorum_db_mysqli_error("$err: $sql");
         return "Updating the virtual hosting settings override for " .
                "vroot $vroot failed.";
     }
@@ -185,7 +185,7 @@ function virtual_hosting_db_setvrootconfig($vroot, $settings)
 
 /**
  * This function is used to retrieve override settings for a vroot.
- * 
+ *
  * @param $vroot - The vroot to retrieve the settings for.
  * @return $settings - The override settings array for the vroot or NULL
  *                 if no settings can be retrieved.
@@ -202,19 +202,20 @@ function virtual_hosting_db_getvrootconfig($vroot)
         WHERE forum_id = $vroot
     ";
 
-    $conn = phorum_db_mysql_connect();
-    $res = mysql_query($sql, $conn);
-    if ($err = mysql_error()) {
-        phorum_db_mysql_error("$err: $sql");
+    $conn = phorum_db_mysqli_connect();
+    $res = mysqli_query($conn, $sql);
+    if ($err = mysqli_error()) {
+        phorum_db_mysqli_error("$err: $sql");
     } else {
-        $rec = mysql_fetch_array($res);
+        $rec = mysqli_fetch_array($res);
         if ($rec) {
-            $return = @unserialize($rec[0]); 
+            $return = @unserialize($rec[0]);
             if (is_array($return)) return $return;
         }
     }
 
     return NULL;
 }
+
 
 ?>

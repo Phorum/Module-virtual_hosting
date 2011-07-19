@@ -1,51 +1,12 @@
 Changelog:
 ----------
 
-2008-02-12 v1.1.5
-
-    - Fixed a database upgrade script problem for MySQL servers that
-      run in strict mode.
-
-2007-08-31 v1.1.4
-
-    - Fix suppressing port 443 in admin URLs if the admin is running
-      inside an HTTPS enabled environment. Thans to yvess for reporting
-      and fixing the problem.
-
-2007-08-20 v1.1.3
-
-    - Fixed database layer bug.
-      Another "thank you!" to yvess for this one.
-
-2007-08-20 v1.1.2
-
-    - Fixed virtual_hosting_db_getvrootbyname().
-      Thanks to yvess for finding the problem and for supplying the fix.
-
-2007-08-06 v1.1.1
-
-    - Fixed a problem in the db layer code, which made the settings
-      screen fail (only showed a SQL error).
-
-2007-07-11 v1.1.0
+2007-07-11 v1.0.1
 
     - Fixed a bug: when deleting a vroot which still had hostnames linked
-      to it, the hostnames would not get unlinked. This resulted in
-      some stale hostnames which could not be deleted through the
-      interface (thanks to David Scott for reporting the bug).
-
-    - Bumped the version number to 1.1.0 to prevent version number
-      overlapping with the 5.1 version of this module.
-
-2007-07-08 v1.0.2
-
-    - Implemented the new phorum_api_user_save_raw() user API function.
-
-2007-07-07 v1.0.1
-
-    - Implemented db layer for Phorum 5.2 and made it work with the
-      strict user API layer, in regard to the "vroot" field that is
-      added to the user table.
+      to it, the hostnames would not get unlinked. This resulted in some
+      stale hostnames which could not be deleted through the interface
+      (thanks to David Scott for reporting the bug).
 
 2007-03-08 v1.0.0
 

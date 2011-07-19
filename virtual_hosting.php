@@ -13,9 +13,6 @@ function phorum_mod_virtual_hosting_common_pre()
 {
     global $PHORUM;
 
-    // Register the "vroot" field as a valid field for the user API code.
-    $GLOBALS['PHORUM']['API']['user_fields']['vroot'] = 'int';
-
     require_once("./mods/virtual_hosting/db.php");
 
     // Check and handle automatic installation and upgrading
@@ -31,7 +28,7 @@ function phorum_mod_virtual_hosting_common_pre()
     // send a Host: header (part of HTTP 1.1), but to be sure, we'll
     // fall back to the configured http path in case the client or
     // server does not do the HTTP 1.1 host header stuff.
-    $host = isset($_SERVER["HTTP_HOST"])
+    $host = isset($_SERVER["HTTP_HOST"]) 
           ? $_SERVER["HTTP_HOST"]
           : NULL;
     if ($host === NULL) {
@@ -49,28 +46,31 @@ function phorum_mod_virtual_hosting_common_pre()
     // Construct a valid http_path setting for the current virtual host.
     // We have to override the http path setting from the general settings
     // in the Phorum admin to construct correct URLs.
-    $http_path =
+    $http_path = 
       (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on"?"https":"http") .
-      "://" . $host .
-      (isset($_SERVER["SERVER_PORT"]) &&
-       $_SERVER["SERVER_PORT"] != 80 && $_SERVER["SERVER_PORT"] != 443
-          ? ":" . $_SERVER["SERVER_PORT"] : "") .
+      "://" . $host . 
+      (isset($_SERVER["SERVER_PORT"]) && $_SERVER["SERVER_PORT"] != 80
+           ? ":" . $_SERVER["SERVER_PORT"] : "") . 
       dirname($_SERVER["PHP_SELF"]);
     $http_path = preg_replace('!/$!', '', $http_path);
-
+    
     // Store the constructed http path in the settings.
-    $PHORUM["http_path"] = $http_path;
+    $PHORUM["SETTINGS"]["http_path"] = $PHORUM["http_path"] = $http_path;
 
     // Check if the current host name is linked to a vroot. If this is
     // not the case, then the virtual hosting mod is out of business.
     $vroot = virtual_hosting_db_getvrootbyname($host);
     if ($vroot === NULL) return;
 
-    // Retrieve override settings for the vroot.
+    // Retrieve override settings for the vroot. The settings that are
+    // already available as valid Phorum settings in $PHORUM["SETTINGS"]
+    // are overridden by these vroot specific settings.
     $vconf = virtual_hosting_db_getvrootconfig($vroot);
     if ($vconf !== NULL) {
         foreach ($vconf as $setting => $value) {
-            $PHORUM[$setting] = $value;
+            if (isset($PHORUM["SETTINGS"][$setting])) {
+                $PHORUM["SETTINGS"][$setting] = $PHORUM[$setting] = $value;
+            }
         }
     }
 
@@ -82,14 +82,14 @@ function phorum_mod_virtual_hosting_common_pre()
         "vconf" => $vconf
     );
 
-    // Force the visitor to the vroot for the current virtual host.
-    // Only forum_ids that are within the vroot are allowed. If a
+    // Force the visitor to the vroot for the current virtual host. 
+    // Only forum_ids that are within the vroot are allowed. If a 
     // forum_id outside the vroot is requested, then the visitor is
     // sent to the vroot index instead.
     $PHORUM["vroot"] = $vroot;
     $forums = phorum_db_get_forums(0, -1, $vroot);
     if (!isset($forums[$PHORUM["forum_id"]])) {
-        $PHORUM["forum_id"] = $vroot;
+        $PHORUM["forum_id"] = $vroot;    
     }
 }
 
@@ -102,8 +102,12 @@ function phorum_mod_virtual_hosting_after_register($userdata)
     // Only run this if we detected a virtual hosting environment.
     if (! isset($GLOBALS["PHORUM"]["MOD_VIRTUAL_HOST"])) return;
 
-    phorum_api_user_save_raw(array(
-        "user_id" => $userdata["user_id"],
+    // Since the userdata does not return the user_id, we'll have to
+    // retrieve the user_id ourselves here.
+    $user_id = phorum_user_check_username($userdata["username"]); 
+    
+    phorum_user_save_simple(array(
+        "user_id" => $user_id,
         "vroot"   => $GLOBALS["PHORUM"]["vroot"]
     ));
 
@@ -142,7 +146,7 @@ function phorum_mod_virtual_hosting_admin_users_form_save($userdata)
 
     $vroot_list = phorum_get_forum_info(3, -1);
     if ($_POST["vroot"] == 0 || isset($vroot_list[$_POST["vroot"]])) {
-        phorum_api_user_save_raw(array(
+        phorum_user_save_simple(array(
             "user_id" => $userdata["user_id"],
             "vroot"   => $_POST["vroot"]
         ));
@@ -185,9 +189,9 @@ function phorum_mod_virtual_hosting_admin_editfolder_form_save($folder_settings)
             $folder_settings["error"] = "Saving virtual host settings failed";
         }
     }
-
-    // Clean up the data that was added for this module. Since the
-    // admin page uses the $_POST array directly for storing
+    
+    // Clean up the data that was added for this module. Since the 
+    // admin page uses the $_POST array directly for storing 
     // settings, it will trip if we don't clean up this data.
     foreach ($folder_settings as $k => $v) {
         if (substr($k, 0, 3) == "vh_") {

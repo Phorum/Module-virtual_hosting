@@ -6,7 +6,7 @@ if (!defined("PHORUM_ADMIN")) return;
 include_once "./include/admin/PhorumInputForm.php";
 $frm = new PhorumInputForm ("", "post", "Select vroot");
 $frm->hidden("module", "modsettings");
-$frm->hidden("mod", "virtual_hosting");
+$frm->hidden("mod", "virtual_hosting"); 
 $frm->hidden("vh_action", "edit_vroot");
 
 // Explain to the admin what he's supposed to do here.

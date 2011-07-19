@@ -16,7 +16,7 @@ $vroot_list = phorum_get_forum_info(3, -1);
 // select_vroot.php settings page.
 $vroot = NULL;
 // Set if included from an admin page.
-if (count($_REQUEST) &&
+if (count($_REQUEST) && 
     isset($_REQUEST["vh_vroot"]) && !empty($_REQUEST["vh_vroot"])) {
     $vroot = (int) $_REQUEST["vh_vroot"];
 }
@@ -46,7 +46,7 @@ if ($vroot !== NULL) {
 // Page header, including some simple menu options for navigation -----------
 
 if ($_REQUEST["module"] == "modsettings")
-{
+{ 
     print "<h1>Edit virtual hosting for vroot:<br/>" .
           "\"{$vroot_list[$vroot]}\"</h1>";
     print "<a href=\"{$_SERVER["PHP_SELF"]}?module=editfolder&forum_id={$vroot}\">Open the folder settings for this vroot</a>";
@@ -64,16 +64,16 @@ if (isset($_POST["vh_action"]) && $_POST["vh_action"] == "edit_vroot" &&
 
 // Create the form ----------------------------------------------------------
 
-// Create the form where the admin can edit settings for a vroot if
+// Create the form where the admin can edit settings for a vroot if 
 // we're running in stand alone mode from the module settings screen.
 // If we're not on the modsettings form, then we hike along with the
 // already existing $frm variable.
 if ($_REQUEST["module"] == "modsettings")
-{
+{ 
     include_once "./include/admin/PhorumInputForm.php";
     $frm = new PhorumInputForm ("", "post", "Save virtual hosting settings");
     $frm->hidden("module", "modsettings");
-    $frm->hidden("mod", "virtual_hosting");
+    $frm->hidden("mod", "virtual_hosting"); 
 }
 
 $frm->hidden("vh_vroot", $vroot);
@@ -97,7 +97,7 @@ if (isset($PHORUM["MOD_VIRTUAL_HOSTING"]["FORM"]) &&
 // switched off. In that case, the vroot settings would get lost, so we
 // want to make sure that this is what the user wants.
 if ($_REQUEST["module"] == "editfolder" && count($hostname_list)) {
-    $frm->add_formevent("submit",
+    $frm->add_formevent("submit", 
         'if (document.forms[1] && document.forms[1].vroot && ' .
         '!document.forms[1].vroot.checked) ' .
         'if (!confirm("You have disabled the vroot option for this folder. ' .
