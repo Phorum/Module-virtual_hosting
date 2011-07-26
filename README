@@ -1,15 +1,10 @@
-Module  : Virtual Hosting
-Version : 1.1.5
-Author  : Maurice Makaay <maurice@phorum.org>
+Module  : @TITLE@
+Version : @VERSION@
+Author  : @AUTHOR@
 
-This module implements virtual hosting facilities for Phorum.
-It extends the vroot functionality of Phorum, so it is possible to bind
-a certain website hostname to a specific vroot. This way, multiple
-websites can have their own Phorum vroot on their own site, looking like
-it were a separate Phorum installation. There are also some extra's to
-make vroots / virtual hosts more versatile.
+@DESCRIPTION@
 
-For running this module, Phorum 5.2 or higher is required.
+For running this module, Phorum @REQUIRED_VERSION@ or higher is required.
 
 The initial development of this module was genrously sponsored by
 Phorum users MarkFresh and rheo. Thanks a lot guys!
@@ -20,13 +15,13 @@ Install:
 
 - Unpack the archive;
 
-- Move the directory "virtual_hosting" to the directory "mods"
+- Move the directory "@MODULE_ID@" to the directory "mods"
   within your Phorum installation;
 
 - Login as administrator in Phorum's administrative interface and
   go to the "Modules" section;
 
-- Enable the module "Virtual Hosting";
+- Enable the module "@TITLE@";
 
 - After this, go to the module's settings screen to configure
   the options for this module and to assign hostnames for virtual
